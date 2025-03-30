@@ -1,7 +1,7 @@
 import torch
 import torch.utils
 from torch.utils.data import Dataset
-
+import matplotlib.pyplot as plt 
 
 def trans(signal, length, overlap):
     #signal = signal.to(torch.device("cuda"))
@@ -25,6 +25,7 @@ class FMDataset(Dataset):
     def __init__(self, signal_path, label_path, length, overlap):
         self.FM = torch.load(signal_path)
         self.label = torch.load(label_path)
+        self.label =self.label - 1
         self.STFT = torch.stack([trans(self.FM[i], length, overlap) for i in range(self.FM.shape[0])])
 
     def __getitem__(self, index):
@@ -39,5 +40,8 @@ class FMDataset(Dataset):
 
 
 if __name__=='__main__': 
-    data = FMDataset(r'indoor_day1_4MHz_4096_test.pt', r'indoor_day1_4MHz_4096_test_label.pt', 512, 0.75)
-    print(data[0])
+    data = FMDataset(r'indoor_day1_4MHz_4096_test.pt', r'indoor_day1_4MHz_4096_test_label.pt', 128, 0.75)
+    a, _=data[0]
+    print(a)
+    plt.imshow(a[0])
+    plt.show()

@@ -151,7 +151,7 @@ class ResNeXt(nn.Module):
             x = torch.flatten(x, 1)
             x = self.fc(x)
  
-        return nn.functional.softmax(x,dim=1)
+        return x
  
  
 def ResNet34(num_classes=1000, include_top=True):
@@ -179,17 +179,7 @@ def ResNeXt50_32x4d(num_classes=1000, include_top=True):
                   include_top=include_top,
                   groups=groups,
                   width_per_group=width_per_group)
-
-
-def FM_Pnet(num_classes=26, include_top=True):
-
-    groups = 32
-    width_per_group = 4
-    return ResNeXt(Bottleneck, [3, 4, 6, 3],
-                  num_classes=num_classes,
-                  include_top=include_top,
-                  groups=groups,
-                  width_per_group=width_per_group)
+ 
  
 def ResNeXt101_32x8d(num_classes=1000, include_top=True):
  
@@ -213,5 +203,5 @@ if __name__ == '__main__':
 from torchsummary import summary
  
 if __name__ == '__main__':
-    net = FM_Pnet()
-    summary(net, (3, 224, 224))
+    net = ResNeXt50_32x4d().cuda()
+    summary(net, (2, 224, 224))
